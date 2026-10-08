@@ -1,0 +1,30 @@
+618,627c
+    self.curRibbonItem = self.FullTypeListMap[itemName]
+.
+439,444c
+    local ribbonItem = self.FullTypeListMap[id]
+.
+372a
+      self.FullTypeListMap[itemKey] = ribbonItem
+      self.FullTypeList[#self.FullTypeList + 1] = itemKey
+      ribbonItem.ribbonIndex = #self.FullTypeList
+.
+366,371d
+364d
+359c
+      if itemKey == self.startupPickName then
+.
+335d
+280,320d
+188,204d
+86,89d
+80d
+78d
+51,72d
+37d
+34d
+0a
+-- Co-op patch: the Xbox 360's RibbonBase script (launch disc, decompiled with unluac), the base of the console
+-- Toy Box ribbon (ribbontoybox.lua), in place of the PC's keyboard rework (which adds a Recents category and pads
+-- every category to a multiple of 9 with blank items for its 1-9 keys). Unchanged from the 360.
+.

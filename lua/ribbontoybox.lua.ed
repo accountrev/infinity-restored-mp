@@ -1,0 +1,148 @@
+601,690d
+596c
+  if self.BuildMode == RibbonToyBox.BuildMode_Grid then
+    return self.initialSelectionStr
+  elseif self.useSingleCategoryForRibbon then
+.
+585a
+function RibbonToyBox:GetUIDSGrid()
+  return self.FullTypeList
+end
+
+.
+544a
+  self.overrideBuildMode = true
+  self.overriddenMode = self.BuildMode_Grid
+.
+506c
+  if self.EditMode ~= self.EditMode_Normal or self.BuildMode == RibbonToyBox.BuildMode_Grid and self.doingGridSelection then
+  else
+.
+500a
+function RibbonToyBox:StartSparkMode()
+  self:RemoveScreen()
+  local modeSelectHandle = self:GetModeSelect()
+  self:CallScreenFunction(modeSelectHandle, "DoInput", "")
+  if self.EditMode == self.EditMode_Normal then
+    print("toggle - spark\n")
+    self.EditMode = self.EditMode_Spark
+    Place_SetEditMode(self.InstanceData.playerNum, "RumpusEditorModeSpark")
+    if self.curGhostObject ~= 0 then
+      Place_IncrementObjectsUsedCount(self.curGhostName, 1)
+      Place_DeletePickedObject(self.InstanceData.playerNum, self.curGhostObject)
+    end
+    self.curGhostObject = 0
+    self.shouldPlaceFirstObject = false
+  else
+    print("toggle - object\n")
+    self.EditMode = self.EditMode_Normal
+    self:UpdateInUseCounts()
+    self.curGhostObject = 0
+    if self:CurrentItemIsPlaceable() == true then
+      Place_StartPlaceMode(self.InstanceData.playerNum)
+      self:PlaceNewGhost()
+    end
+    Place_SetEditMode(self.InstanceData.playerNum, "RumpusEditorModeSpark")
+  end
+  self:CallFlashFunction("_root.RefreshButtonLegend")
+end
+
+.
+483,492c
+  if self.BuildMode ~= RibbonToyBox.BuildMode_Uninitialized then
+    semiPersitanceTable.BuildMode = self.BuildMode
+  end
+.
+376,386c
+      legendString = self:AppendMenuKey(legendString, "coopui_Place_Exit")
+.
+366c
+      legendString = self:AppendMenuKey(legendString, "coopui_Place_Exit")
+.
+362c
+    if self:OKToUseButton("Place") and (self:CurrentItemIsPlaceable() or self.BuildMode == RibbonToyBox.BuildMode_Grid and self.doingGridSelection == true) then
+.
+302,317d
+290,292c
+    if self.BuildMode == self.BuildMode_Ribbon or forceUpdate then
+      self:ScheduleItemUpate(itemName)
+.
+282,286c
+    if handle ~= UI.INVALID_UI_HANDLE then
+.
+250,276d
+219,227c
+  self.meterValue = self:CurrentItemTotalValue()
+  self:CallScreenFunctionByScreenName("hud_perf_meters", self.InstanceData.playerNum, "UpdateMeter", self)
+  return RibbonToyBox.superClass().PlaceObject(self)
+.
+212a
+  else
+    return true
+.
+136,211c
+function RibbonToyBox:GetGridSelectMode()
+  if self.BuildMode == self.BuildMode_Grid then
+    if self.enteredThroughPick then
+      return false
+    else
+      return true
+.
+118,119c
+function RibbonToyBox:EndBlueprint()
+  self:CallFlashFunction("_root.EndBlueprint")
+.
+114,115c
+function RibbonToyBox:SetBlueprintObject(objectName)
+  self:CallFlashFunction("_root.SetBlueprintObject", objectName)
+.
+105,111c
+function RibbonToyBox:SetGridMode(_doingGridSelection)
+  self.doingGridSelection = _doingGridSelection
+end
+
+function RibbonToyBox:SetBlueprintMode()
+  self:CallFlashFunction("_root.SetBlueprintMode")
+.
+101a
+  if mode == RibbonToyBox.BuildMode_Grid and self.doingGridSelection and self.BuildMode ~= RibbonToyBox.BuildMode_Uninitialized then
+    if self.curGhostObject ~= 0 then
+      Place_StopPlaceMode(self.InstanceData.playerNum, self.curGhostObject, true)
+      self.curGhostObject = 0
+      self.shouldPlaceFirstObject = false
+    end
+    self.needToUpdateGhostModel = false
+  end
+.
+87a
+  Place_ReturnToSparkIfNeeded(self.InstanceData.playerNum)
+.
+81,85d
+76c
+  Place_SetShouldReturnToSpark(self.InstanceData.playerNum, false)
+.
+70d
+47,66d
+43c
+  self.overriddenMode = self.BuildMode_Grid
+.
+28,33c
+RibbonToyBox.BuildMode_InitialValue = RibbonToyBox.BuildMode_Grid
+.
+15,17c
+  priority = 0
+.
+12c
+    P2H = "Infinitorium/Infinitorium_V"
+.
+10c
+    P1 = "Infinitorium/Infinitorium_V",
+.
+5,6d
+0a
+-- Co-op patch: the Xbox 360's RibbonToyBox screen script (launch disc, decompiled with unluac), the console
+-- Toy Box build ribbon, in place of the PC's keyboard rework. The exe opens it
+-- for a player on a pad and for both players in split screen (coop.c, coop_ribbon_name_hook); keyboard and mouse
+-- in single player keep the PC's touch ribbon (iOS_RibbonToyBox). One change from the 360: the PC has no console
+-- full-screen movie (its Infinitorium is the keyboard rework), so every layout uses the split movie Infinitorium_V.
+.
